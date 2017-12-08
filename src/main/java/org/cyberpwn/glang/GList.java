@@ -3,7 +3,6 @@ package org.cyberpwn.glang;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -27,6 +26,40 @@ public class GList<T> extends ArrayList<T>
 	public GList()
 	{
 		super();
+	}
+
+	public GList<T> grepExplicit(int startIndex, int endIndex)
+	{
+		GList<T> f = new GList<T>();
+
+		for(int i = startIndex; i < endIndex + 1; i++)
+		{
+			f.add(getAt(i));
+		}
+
+		return f;
+	}
+
+	public GList<T> grepDistance(int startIndex, int size)
+	{
+		GList<T> f = new GList<T>();
+
+		for(int i = 0; i < size; i++)
+		{
+			f.add(getAt(i + startIndex));
+		}
+
+		return f;
+	}
+
+	public T getAt(int index)
+	{
+		return get((int) index);
+	}
+
+	public T getAt(Integer index)
+	{
+		return get(index.intValue());
 	}
 
 	/**
@@ -427,14 +460,14 @@ public class GList<T> extends ArrayList<T>
 	 */
 	public void sort()
 	{
-		Collections.sort(this, new Comparator<T>()
-		{
-			@Override
-			public int compare(T o1, T o2)
-			{
-				return o1.toString().compareTo(o2.toString());
-			}
-		});
+		sort(null);
+	}
+
+	public GList<T> sortCopy()
+	{
+		GList<T> m = copy();
+		m.sort(null);
+		return m;
 	}
 
 	/**
@@ -608,6 +641,31 @@ public class GList<T> extends ArrayList<T>
 
 		T t = get(0);
 		remove(0);
+		return t;
+	}
+
+	/**
+	 * Remove the last element
+	 */
+	public void removeLast()
+	{
+		remove(last());
+	}
+
+	/**
+	 * Return the last element in the list, then delete it
+	 *
+	 * @return the popped element
+	 */
+	public T popLast()
+	{
+		if(isEmpty())
+		{
+			return null;
+		}
+
+		T t = get(last());
+		remove(last());
 		return t;
 	}
 
